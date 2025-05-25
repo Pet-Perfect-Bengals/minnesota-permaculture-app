@@ -1,0 +1,815 @@
+/* Minnesota Permaculture Guild Designer CSS - Fully Responsive */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100vw; /* Ensure app doesn't exceed viewport width */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Header - Responsive */
+.app-header {
+  background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 100%);
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.app-header h1 {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.app-header p {
+  opacity: 0.9;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+}
+
+/* Main Content Layout - Fully Responsive */
+.app-content {
+  flex: 1;
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  min-height: calc(100vh - 120px);
+  
+  /* Large Desktop (1400px+) */
+  grid-template-columns: 350px 1fr 400px;
+  grid-template-rows: 1fr;
+  grid-template-areas: "plants designer info";
+}
+
+/* Desktop (1200px - 1399px) */
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .app-content {
+    grid-template-columns: 320px 1fr 360px;
+    gap: 18px;
+    padding: 18px;
+  }
+}
+
+/* Small Laptop - Two Column Layout (768px - 1199px) */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .app-content {
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+      "plants designer"
+      "info info";
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .info-panel {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+}
+
+/* Small Tablet Layout (640px - 767px) */
+@media (max-width: 767px) {
+  .app-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas: 
+      "plants"
+      "info" 
+      "designer";
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  .plant-panel, .info-panel  {
+    max-height: 280px;
+  }
+  
+  .designer-panel {
+    min-height: 400px;
+  }
+}
+
+/* Mobile Layout (480px and below) */
+@media (max-width: 480px) {
+  .app-content {
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .plant-panel, .info-panel {
+    max-height: 250px;
+  }
+  
+  .designer-panel {
+    min-height: 350px;
+  }
+}
+
+/* Panel Base Styles - Responsive */
+.plant-panel, .designer-panel, .info-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0; /* Important for flexbox */
+}
+
+.plant-panel { grid-area: plants; }
+.designer-panel { grid-area: designer; }
+.info-panel { grid-area: info; }
+
+.panel-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: clamp(15px, 3vw, 20px);
+  border-bottom: 1px solid #dee2e6;
+  flex-shrink: 0;
+}
+
+.panel-header h2 {
+  color: #2d5a27;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  margin-bottom: 15px;
+}
+
+/* Search Box - Responsive */
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: clamp(8px, 2vw, 12px);
+  transition: border-color 0.2s;
+}
+
+.search-box:focus-within {
+  border-color: #4a7c59;
+}
+
+.search-box svg {
+  color: #6c757d;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: clamp(12px, 2.5vw, 14px);
+  min-width: 0;
+}
+
+/* Plant List - Responsive */
+.plant-list {
+  flex: 1;
+  padding: clamp(10px, 3vw, 20px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+}
+
+.plant-card {
+  background: #fff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: clamp(12px, 3vw, 16px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  touch-action: manipulation; /* Better mobile touch */
+}
+
+.plant-card:hover, .plant-card:active {
+  border-color: #4a7c59;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.15);
+}
+
+.plant-card.selected {
+  border-color: #2d5a27;
+  background: #f8fff8;
+  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
+}
+
+.plant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.plant-header h4 {
+  color: #2d5a27;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.plant-layer {
+  background: #4a7c59;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+  text-transform: capitalize;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.plant-variety {
+  color: #6c757d;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  font-style: italic;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.plant-size {
+  color: #495057;
+  font-size: clamp(0.75rem, 2vw, 0.85rem);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.plant-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.benefit-tag {
+  background: #e8f5e8;
+  color: #2d5a27;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.nitrogen-tag {
+  background: #fef3cd;
+  color: #856404;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+  font-weight: 600;
+}
+
+.plant-price {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #28a745;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
+  font-weight: 600;
+}
+
+/* Designer Panel - Responsive */
+.guild-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(10px, 3vw, 20px);
+  margin-top: 15px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  padding: clamp(6px, 2vw, 8px) clamp(8px, 2.5vw, 12px);
+  border-radius: 8px;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  font-weight: 600;
+  color: #2d5a27;
+  white-space: nowrap;
+}
+
+.stat svg {
+  color: #4a7c59;
+  flex-shrink: 0;
+}
+
+/* Design Area - Fully Responsive with Panning */
+.design-area {
+  flex: 1;
+  position: relative;
+  background: 
+    radial-gradient(circle at 1px 1px, rgba(74, 124, 89, 0.15) 1px, transparent 0);
+  background-size: clamp(15px, 3vw, 20px) clamp(15px, 3vw, 20px);
+  margin: clamp(8px, 2vw, 20px);
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
+  overflow: hidden; /* Hide overflow for smooth panning */
+  min-height: 400px;
+  cursor: grab; /* Show it's pannable */
+  user-select: none; /* Prevent text selection while panning */
+}
+
+.design-area.panning {
+  cursor: grabbing;
+}
+
+/* Inner pannable content */
+.design-content {
+  position: relative;
+  min-width: 1000px; /* Ensure minimum width for proper design space */
+  min-height: 800px; /* Ensure minimum height for proper design space */
+  width: 1000px;
+  height: 800px;
+  transform-origin: 0 0;
+}
+
+/* Small laptop optimization - bigger design area */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .design-area {
+    min-height: calc(100vh - 400px);
+    margin: 12px;
+  }
+  
+  .design-content {
+    min-width: 1200px; /* Even more space on small laptops */
+    min-height: 900px;
+    width: 1200px;
+    height: 900px;
+  }
+}
+
+/* Tablet and mobile */
+@media (max-width: 767px) {
+  .design-area {
+    margin: clamp(5px, 1vw, 12px);
+    min-height: 350px;
+  }
+  
+  .design-content {
+    min-width: 800px; /* Reasonable space for mobile */
+    min-height: 600px;
+    width: 800px;
+    height: 600px;
+  }
+}
+
+.design-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(74, 124, 89, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 124, 89, 0.1) 1px, transparent 1px);
+  background-size: clamp(15px, 3vw, 20px) clamp(15px, 3vw, 20px);
+}
+
+.empty-design {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #6c757d;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  padding: 20px;
+  max-width: 90%;
+}
+
+.empty-design p {
+  margin-bottom: 10px;
+}
+
+/* Placed Plants - Responsive and Draggable */
+.placed-plant {
+  position: absolute;
+  background: rgba(74, 124, 89, 0.9);
+  border: 2px solid #2d5a27;
+  border-radius: 8px;
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+  min-width: clamp(40px, 8vw, 60px);
+  min-height: clamp(40px, 8vw, 60px);
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.placed-plant:hover, .placed-plant:active {
+  background: rgba(74, 124, 89, 1);
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.placed-plant.dragging {
+  cursor: grabbing;
+  transform: scale(1.1);
+  z-index: 20;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.placed-plant.selected {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.3);
+}
+
+.placed-plant.has-issues {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.9);
+}
+
+.drag-indicator {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.placed-plant:hover .drag-indicator {
+  opacity: 1;
+}
+
+.plant-name {
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  line-height: 1.2;
+  margin-bottom: 4px;
+  padding: 0 2px;
+}
+
+.plant-layer-indicator {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: clamp(16px, 4vw, 20px);
+  height: clamp(16px, 4vw, 20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+  font-weight: bold;
+}
+
+.warning-icon {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  color: #ffc107;
+  width: clamp(12px, 3vw, 16px);
+  height: clamp(12px, 3vw, 16px);
+}
+
+.nitrogen-indicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: #ffc107;
+  color: #856404;
+  border-radius: 50%;
+  width: clamp(14px, 3vw, 16px);
+  height: clamp(14px, 3vw, 16px);
+  font-size: clamp(0.5rem, 1.2vw, 0.6rem);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-plant {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: clamp(18px, 4vw, 20px);
+  height: clamp(18px, 4vw, 20px);
+  cursor: pointer;
+  font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  touch-action: manipulation;
+}
+
+.placed-plant:hover .remove-plant,
+.placed-plant:active .remove-plant {
+  opacity: 1;
+}
+
+/* Mobile: Always show remove button */
+@media (max-width: 767px) {
+  .remove-plant {
+    opacity: 0.7;
+  }
+}
+
+/* Info Panel - Responsive */
+.info-panel {
+  overflow-y: auto;
+}
+
+.plant-details, .compatibility-info, .welcome-info {
+  padding: clamp(15px, 3vw, 20px);
+}
+
+.plant-details h3 {
+  color: #2d5a27;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  margin-bottom: 8px;
+}
+
+.variety {
+  color: #6c757d;
+  font-style: italic;
+  margin-bottom: 20px;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+}
+
+.detail-section {
+  margin-bottom: 16px;
+  padding: clamp(10px, 2.5vw, 12px);
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.detail-section strong {
+  color: #2d5a27;
+  display: block;
+  margin-bottom: 6px;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.detail-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.detail-section li {
+  padding: 2px 0;
+  position: relative;
+  padding-left: 20px;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  line-height: 1.4;
+}
+
+.detail-section li:before {
+  content: "•";
+  color: #4a7c59;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.benefits-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pros-cons {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pros, .cons {
+  padding: clamp(10px, 2.5vw, 12px);
+  border-radius: 8px;
+}
+
+.pros {
+  background: #e8f5e8;
+  border-left: 4px solid #28a745;
+}
+
+.cons {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+}
+
+.pros strong, .cons strong {
+  color: #2d5a27;
+  display: block;
+  margin-bottom: 8px;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.pros ul, .cons ul {
+  font-size: clamp(0.8rem, 2vw, 0.85rem);
+}
+
+/* Compatibility Info - Responsive */
+.compatibility-info h3 {
+  color: #2d5a27;
+  font-size: clamp(1.1rem, 2.8vw, 1.3rem);
+  margin-bottom: 16px;
+}
+
+.placed-plant-info {
+  background: #f8f9fa;
+  padding: clamp(10px, 2.5vw, 12px);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.placed-plant-info strong {
+  color: #2d5a27;
+  font-size: clamp(0.95rem, 2.3vw, 1.1rem);
+}
+
+.placed-plant-info p {
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  margin-top: 4px;
+}
+
+.compatibility-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.compatibility-item {
+  padding: clamp(10px, 2.5vw, 12px);
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.compatibility-item.beneficial {
+  background: #e8f5e8;
+  border-color: #28a745;
+}
+
+.compatibility-item.neutral {
+  background: #f8f9fa;
+  border-color: #6c757d;
+}
+
+.compatibility-item.harmful {
+  background: #f8d7da;
+  border-color: #dc3545;
+}
+
+.compatibility-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.compatibility-header strong {
+  color: #2d5a27;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.compatibility-item p {
+  color: #495057;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  line-height: 1.4;
+}
+
+/* Welcome Info - Responsive */
+.welcome-info h3 {
+  color: #2d5a27;
+  font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+  margin-bottom: 16px;
+}
+
+.instructions h4 {
+  color: #4a7c59;
+  margin: 16px 0 12px 0;
+  font-size: clamp(0.95rem, 2.3vw, 1.1rem);
+}
+
+.instructions ol {
+  padding-left: 20px;
+  color: #495057;
+}
+
+.instructions li {
+  margin-bottom: 8px;
+  line-height: 1.4;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.templates {
+  margin-top: 16px;
+}
+
+.template-button {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: clamp(10px, 2.5vw, 12px) clamp(16px, 4vw, 20px);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-bottom: 8px;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  touch-action: manipulation;
+}
+
+.template-button:hover, .template-button:active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* Ultra-wide screens (1400px+) */
+@media (min-width: 1400px) {
+  .app-content {
+    grid-template-columns: 400px 1fr 450px;
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+}
+
+/* Common small laptop screens (1280px - 1366px) */
+@media (max-width: 1366px) and (min-width: 1200px) {
+  .app-content {
+    grid-template-columns: 320px 1fr 360px;
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
+/* Ensure no horizontal overflow on any screen */
+@media (max-width: 1366px) {
+  * {
+    max-width: 100%;
+  }
+  
+  .app-content {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Scrollbar Styling - Responsive */
+::-webkit-scrollbar {
+  width: clamp(6px, 1.5vw, 8px);
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4a7c59;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2d5a27;
+}
+
+/* Print styles */
+@media print {
+  .app-header {
+    background: #2d5a27 !important;
+    color: white !important;
+  }
+  
+  .design-area {
+    border: 2px solid #dee2e6 !important;
+    background: white !important;
+  }
+}
